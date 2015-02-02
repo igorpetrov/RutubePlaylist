@@ -15,6 +15,7 @@
 ```html
 <iframe width="680px" height="508px" src="http://rutube.ru/playlist/?playlist=" frameborder="0" scrolling="no" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
 ```
+
 где:
 
 `width` - ширина плейлиста;
@@ -115,7 +116,9 @@
 Минимальным требованием для отображения плейлиста является передача хотя бы одного источника в списке `"feeds"`:
 ```json
 {
-    "feeds": [{"id": "28", "type": "tv"}]
+    "feeds": [
+        {"id": "28", "type": "tv"}
+    ]
 }
 ```
 
@@ -129,7 +132,7 @@
 Здесь не стоит пугаться большого количества символов вроде `%` - это лишь безопасный формат записи специальных символов, содержащихся в параметрах, где `%7B` соответствует скобке `{`, `%22` соответвует кавычкам `"` и так далее.
 
 Полученный результат необходимо добавить к атрибуту `src` в шаблоне плейлиста (сразу после `playlist=`):
-```json
+```html
 <iframe width="680px" height="508px" src="http://rutube.ru/playlist/?playlist=%7B%22feeds%22%3A%5B%7B%22id%22%3A%2228%22%2C%22type%22%3A%22tv%22%7D%5D%7D" frameborder="0" scrolling="no" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
 ```
 
@@ -153,6 +156,10 @@
     "feeds": [{
         "id": "28",
         "type": "tv",
+        "name": "Интерны. Все серии"
+    }, {
+        "id": "28",
+        "type": "tv",
         "name": "Интерны. Сезон 1",
         "params": {
             "season": "1"
@@ -168,4 +175,67 @@
 }
 ```
 
-В этом примере будет создан плейлист, содержащий первый и второй сезоны сериала "Интерны".
+В этом примере будет создан плейлист с тремя вкладками, содержащими все серии всех сезонов, а так же первый и второй сезоны сериала "Интерны".
+
+Также в плейлисте есть возможность включить автоматический старт следующего ролика, пердава параметр `"rotate"`:
+```json
+{
+    "rotate": "true",
+    "feeds": [
+        { "id": "28", "type": "tv" },
+        { "id": "1368", "type": "tv" }
+    ]
+}
+```
+
+Для наилучшей интеграции с дизайном сайта элементам плейлиста можно задавать собственные цвета. Для этого используется отдельный набор параметров:
+```json
+{
+    "background": "ff0000",
+    "feeds": [
+        { "id": "28", "type": "tv" },
+        { "id": "1368", "type": "tv" }
+    ]
+}
+```
+
+В этом примере плейлисту с помощью параметра `"background"` будет задан красный цвет фона. Все цвета в параметрах передаются в широко распространненом HEX-формате, содержащем шесть символов. Для выбора цвета можно воспользоваться [соответствующими сервисами](http://colorpicker.com).
+
+Список параметров, задающих цвета, выглядит следующим образом:
+
+`"background"` - цвет фона плейлиста;
+
+``menu_background"` - цвет фона меню;
+
+`"feed_background"` - цвет фона ленты роликов;
+
+`"border_color"` - цвет рамки;
+
+`"text_color"` - цвет текста;
+
+`"elements_color"` - цвет элементов управления (пункты меню, стрелки).
+
+Пример плейлиста, содержащего полный список параметров брендирования:
+```json
+{
+    "background": "FF0000",
+    "background": "CCCCCC",
+    "menu_background": "000000",
+    "feed_background": "0000FF",
+    "border_color": "FFEA00",
+    "text_color": "00FF08",
+    "elements_color": "FF6600",
+    "rotate": "true",
+    "feeds": [
+        { "id": "28", "type": "tv" },
+        { "id": "1368", "type": "tv" }
+    ]
+}
+```
+
+Код для встравивания, содержащий закодированные параметры из примера выше:
+```html
+<iframe width="680px" height="508px" src="http://rutube.ru/playlist/?playlist=%7B%22background%22%3A%22FF0000%22%2C%22background%22%3A%22CCCCCC%22%2C%22menu_background%22%3A%22000000%22%2C%22feed_background%22%3A%220000FF%22%2C%22border_color%22%3A%22FFEA00%22%2C%22text_color%22%3A%2200FF08%22%2C%22elements_color%22%3A%22FF6600%22%2C%22rotate%22%3A%22true%22%2C%22feeds%22%3A%5B%7B%22id%22%3A%2228%22%2C%22type%22%3A%22tv%22%7D%2C%7B%22id%22%3A%221368%22%2C%22type%22%3A%22tv%22%7D%5D%7D" frameborder="0" scrolling="no" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
+```
+
+## Ширина и высота плейлиста
